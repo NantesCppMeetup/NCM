@@ -1,12 +1,21 @@
+//#include "max_c_style_variadic_function.hpp"
+//#include "max_variadic_macro.hpp"
+#include "max_variadic_template.hpp"
+//#include "safe_printf.hpp"
+//#include "emplace_back.hpp"
+//#include "perfect_forwarding.hpp"
+
+int main() {
+	//max_c_style_variadic_function::main();
+	//max_variadic_macro::main();
+	max_variadic_template::main();
+	//safe_printf::main();
+	//emplace_back::main();
+	//perfect_forwarding::main();
+	return 0;
+}
+
 /*
-~~~ Templates variadiques en C++ ~~~
-Depuis C++11, les templates ont acquis la capacité d'accepter un nombre variable de paramètres.
-Cette évolution s'intègre bien mieux dans l'esprit du langage que les fonctions et macros variadiques héritées du C, notamment pour la sûreté du typage.
-Nous verrons quelques uns des usages que la bibliothèque standard fait des templates variadiques, parfois de manière transparente pour l'utilisateur.
-Nous ouvrirons ensuite notre horizon sur quelques possilibités d'utilisation simples que la bibliothèque standard n'exploite pas encore.
-Au delà des sentiers battus, notre imagination trouvera-t-elle de nombreuses applications à cette nouveauté du langage ?
-Est-ce un outil de tous les jours, ou préfèrera-t-on le considérer comme un outil bas niveau servant à mettre en oeuvre des fonctionalités plus haut niveau ?
-~~~
 
 http://lbrandy.com/blog/2013/03/variadic_templates/
 https://channel9.msdn.com/Events/GoingNative/GoingNative-2012/Variadic-Templates-are-Funadic
@@ -39,19 +48,3 @@ joke : 6-dots http://lbrandy.com/blog/2013/02/c11s-six-dots/
 
 */
 
-//#include "max_c_style_variadic_function.hpp"
-//#include "max_variadic_macro.hpp"
-#include "max_variadic_template.hpp"
-//#include "safe_printf.hpp"
-//#include "emplace_back.hpp"
-//#include "perfect_forwarding.hpp"
-
-int main() {
-	//max_c_style_variadic_function::main();
-	//max_variadic_macro::main();
-	max_variadic_template::main();
-	//safe_printf::main();
-	//emplace_back::main();
-	//perfect_forwarding::main();
-	return 0;
-}
