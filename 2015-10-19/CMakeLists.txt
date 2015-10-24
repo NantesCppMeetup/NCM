@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.3)
+project(variadic_templates)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++1z")
+set(SOURCE_FILES main.cpp max_c_style_variadic_function.hpp safe_printf.hpp max_variadic_macro.hpp max_variadic_template.hpp demangle.hpp perfect_forwarding.hpp emplace_back.hpp)
+add_executable(variadic_templates ${SOURCE_FILES})
