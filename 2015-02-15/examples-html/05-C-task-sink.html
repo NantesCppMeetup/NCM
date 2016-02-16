@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+    <title>Parallel task sink in C++ - ØMQ - The Guide</title>
+    
+    	<script type="text/javascript" src="05-C-task-sink_files/login__CustomDomainScript.html"></script>
+
+    
+    <script type="text/javascript" src="05-C-task-sink_files/init.js"></script>
+    <script type="text/javascript">
+        var URL_HOST = 'www.wikidot.com';
+        var URL_DOMAIN = 'wikidot.com';
+        var USE_SSL =  true ;
+        var URL_STATIC = 'http://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba';
+        // global request information
+        
+        var WIKIREQUEST = {};
+        WIKIREQUEST.info = {};
+        
+        WIKIREQUEST.info.domain = "zguide.zeromq.org";
+        WIKIREQUEST.info.siteId = 193426;
+        WIKIREQUEST.info.siteUnixName = "zguide";
+        WIKIREQUEST.info.categoryId = 1769216;
+        WIKIREQUEST.info.themeId = 1;
+        WIKIREQUEST.info.requestPageName = "cpp:tasksink";
+        OZONE.request.timestamp = 1455478789;
+        OZONE.request.date = new Date();
+        WIKIREQUEST.info.lang = 'en';
+                WIKIREQUEST.info.pageUnixName = "cpp:tasksink";
+        WIKIREQUEST.info.pageId = 8762388;
+                        WIKIREQUEST.info.lang = "en";
+        OZONE.lang = "en";
+        var isUAMobile = !!/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    </script>
+    
+    
+
+
+    
+        <script type="text/javascript">
+    
+        require.config({
+            baseUrl: URL_STATIC + '/common--javascript',
+            paths: {
+                'jquery.ui': 'jquery-ui.min',
+                'jquery.form': 'jquery.form'
+            }
+        });
+    
+    </script>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+            
+    
+    
+    
+    
+    <meta http-equiv="content-language" content="en">
+    <script type="text/javascript" src="05-C-task-sink_files/WIKIDOT.js"></script>
+        
+    
+    <style type="text/css" id="internal-style">
+        
+        /* modules */
+        
+                
+        /* theme */
+                    @import url(http://d3g0gp89917ko0.cloudfront.net/v--edac79f846ba/common--theme/base/css/style.css);
+                    @import url(http://zguide.wdfiles.com/local--code/admin:css/1);
+            </style>
+    
+        
+        
+        
+    <link rel="shortcut icon" href="http://zguide.zeromq.org/local--favicon/favicon.gif">
+    <link rel="icon" type="image/gif" href="http://zguide.zeromq.org/local--favicon/favicon.gif">
+    
+            <link rel="apple-touch-icon" href="http://zguide.zeromq.org/common--images/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="http://zguide.zeromq.org/common--images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="http://zguide.zeromq.org/common--images/apple-touch-icon-114x114.png">
+        
+        
+            <link rel="alternate" type="application/wiki" title="Edit this page" href="javascript:WIKIDOT.page.listeners.editClick()">
+    
+        <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-18234656-1']);
+        _gaq.push(['_setDomainName', 'none']);
+        _gaq.push(['_setAllowLinker', true]);
+        _gaq.push(['_trackPageview']);
+
+        _gaq.push(['old._setAccount', 'UA-68540-5']);
+        _gaq.push(['old._setDomainName', 'none']);
+        _gaq.push(['old._setAllowLinker', true]);
+        _gaq.push(['old._trackPageview']);
+
+                _gaq.push(['userTracker._setAccount', 'UA-3207370-7']);
+        _gaq.push(['userTracker._trackPageview']);
+            </script>
+    
+    <script type="text/javascript">
+        window.google_analytics_uacct = 'UA-18234656-1';
+        window.google_analytics_domain_name = 'none';
+    </script>
+    
+    </head>
+<body id="html-body">
+<div id="skrollr-body">
+<a name="page-top"></a>
+
+<div id="container-wrap-wrap">
+    <div id="container-wrap">
+        <div id="container">
+            <div id="header">
+              <h1><a href="http://zguide.zeromq.org/"><span>ØMQ - The Guide</span></a></h1>
+                
+                
+                <!-- google_ad_section_start(weight=ignore) -->
+                
+                <div id="search-top-box" class="form-search">
+    <form id="search-top-box-form" action="dummy" class="input-append">
+        <input id="search-top-box-input" class="text empty search-query" size="15" name="query" value="Search this site" onfocus="if(YAHOO.util.Dom.hasClass(this, 'empty')){YAHOO.util.Dom.removeClass(this,'empty'); this.value='';}" type="text"><input class="button btn" name="search" value="Search" type="submit">
+    </form>
+</div>
+                
+                
+                    <div id="top-bar">
+                        
+
+<ul>
+<li><a href="http://zguide.zeromq.org/">Home</a></li>
+<li><a href="javascript:;">Admin</a>
+<ul>
+<li><a class="wiki-standalone-button" href="javascript:;" onclick="WIKIDOT.page.listeners.editClick(event)">Edit page</a></li>
+<li><a class="wiki-standalone-button" href="javascript:;" onclick="WIKIDOT.page.listeners.printClick(event)">Print page</a></li>
+<li><a href="http://zguide.zeromq.org/nav:top/edit/true">Edit this menu</a></li>
+<li><a href="http://zguide.zeromq.org/nav:side/edit/true">Edit side menu</a></li>
+<li><a href="http://zguide.zeromq.org/system:list-all-categories">Page categories</a></li>
+<li><a href="http://zguide.zeromq.org/system:recent-changes">Recent changes</a></li>
+<li><a href="http://zguide.zeromq.org/admin:themes">Change theme</a></li>
+<li><a href="http://zguide.zeromq.org/admin:manage">Manage site</a></li>
+</ul>
+</li>
+<li><a href="javascript:;">Help</a>
+<ul>
+<li><a href="http://zguide.zeromq.org/help">Wiki syntax</a></li>
+<li><a href="http://zguide.zeromq.org/modules-reference">Modules reference</a></li>
+</ul>
+</li>
+</ul>
+
+                    </div>
+                
+                <div id="login-status"><a href="javascript:;" onclick="WIKIDOT.page.listeners.createAccount(event)" class="login-status-create-account btn">Create account</a> <span>or</span> <a href="javascript:;" onclick="WIKIDOT.page.listeners.loginClick(event)" class="login-status-sign-in btn btn-primary">Sign in</a> </div>
+                <div id="header-extra-div-1"><span></span></div><div id="header-extra-div-2"><span></span></div><div id="header-extra-div-3"><span></span></div>
+            </div>
+            
+            <div id="content-wrap">
+                
+                    <div id="side-bar">
+                        
+
+
+                        
+
+<p>This page is not used.</p>
+
+                        
+
+
+                    </div>
+                
+                
+                <!-- google_ad_section_end -->
+                
+                <div id="main-content">
+                    <div id="action-area-top"></div>
+                    
+                    
+                        <div id="page-title">
+                            Parallel task sink in C++
+                        </div>
+                    
+
+                    
+
+                    
+
+
+
+                    <div id="page-content">
+                        
+
+<div class="code">
+<p><span style="color:#BC7A00"><span style="white-space: pre-wrap;">//</span><br>
+<span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Task sink in C++<br>
+<span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Binds PULL socket to tcp:<span style="white-space: pre-wrap;">//</span>localhost:5558<br>
+<span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Collects results from workers via that socket<br>
+<span style="white-space: pre-wrap;">//</span><br>
+<span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Olivier Chamoux &lt;<span style="visibility: visible;" class="wiki-email"><a href="mailto:olivier.chamoux@fr.thalesgroup.com">olivier.chamoux@fr.thalesgroup.com</a></span>&gt;<br>
+<span style="white-space: pre-wrap;">//</span><br>
+#include &lt;zmq.hpp&gt;<br>
+#include &lt;time.h&gt;<br>
+#include &lt;sys/time.h&gt;<br>
+#include &lt;iostream&gt;</span></p>
+<p><span style="color:#B00040">int</span> main (<span style="color:#B00040">int</span> argc, <span style="color:#B00040">char</span> <span style="color:#666666">*</span>argv<span style="white-space: pre-wrap;">[]</span>)<br>
+{<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#408080"><em><span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Prepare our context and socket</em></span><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>zmq<span style="color:#666666">::</span>context_t context(<span style="color:#666666">1</span>);<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>zmq<span style="color:#666666">::</span>socket_t receiver(context,ZMQ_PULL);<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>receiver.bind(<span style="color:#BA2121">"tcp:<span style="white-space: pre-wrap;">//</span>*:5558"</span>);</p>
+<p><tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#408080"><em><span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Wait for start of batch</em></span><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>zmq<span style="color:#666666">::</span>message_t message;<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>receiver.recv(<span style="color:#666666">&amp;</span>message);</p>
+<p><tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#408080"><em><span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Start our clock now</em></span><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#008000"><strong>struct</strong></span> timeval tstart;<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>gettimeofday (<span style="color:#666666">&amp;</span>tstart, <span style="color:#008000">NULL</span>);</p>
+<p><tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#408080"><em><span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Process 100 confirmations</em></span><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#B00040">int</span> task_nbr;<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#B00040">int</span> total_msec <span style="color:#666666">=</span> <span style="color:#666666">0</span>;<tt><span style="white-space: pre-wrap;">     </span></tt><span style="color:#408080"><em><span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Total calculated cost in msecs</em></span><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#008000"><strong>for</strong></span> (task_nbr <span style="color:#666666">=</span> <span style="color:#666666">0</span>; task_nbr <span style="color:#666666">&lt;</span> <span style="color:#666666">100</span>; task_nbr<span style="color:#666666">++</span>) {</p>
+<p><tt><span style="white-space: pre-wrap;">        </span></tt>receiver.recv(<span style="color:#666666">&amp;</span>message);<br>
+<tt><span style="white-space: pre-wrap;">        </span></tt><span style="color:#008000"><strong>if</strong></span> ((task_nbr <span style="color:#666666">/</span> <span style="color:#666666">10</span>) <span style="color:#666666">*</span> <span style="color:#666666">10</span> <span style="color:#666666">==</span> task_nbr)<br>
+<tt><span style="white-space: pre-wrap;">            </span></tt>std<span style="color:#666666">::</span>cout <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> <span style="color:#BA2121">":"</span> <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> std<span style="color:#666666">::</span>flush;<br>
+<tt><span style="white-space: pre-wrap;">        </span></tt><span style="color:#008000"><strong>else</strong></span><br>
+<tt><span style="white-space: pre-wrap;">            </span></tt>std<span style="color:#666666">::</span>cout <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> <span style="color:#BA2121">"."</span> <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> std<span style="color:#666666">::</span>flush;<br>
+<tt><span style="white-space: pre-wrap;">    </span>}</tt><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#408080"><em><span style="white-space: pre-wrap;">//</span><tt><span style="white-space: pre-wrap;">  </span></tt>Calculate and report duration of batch</em></span><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#008000"><strong>struct</strong></span> timeval tend, tdiff;<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>gettimeofday (<span style="color:#666666">&amp;</span>tend, <span style="color:#008000">NULL</span>);</p>
+<p><tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#008000"><strong>if</strong></span> (tend.tv_usec <span style="color:#666666">&lt;</span> tstart.tv_usec) {<br>
+<tt><span style="white-space: pre-wrap;">        </span></tt>tdiff.tv_sec <span style="color:#666666">=</span> tend.tv_sec <span style="color:#666666">-</span> tstart.tv_sec <span style="color:#666666">-</span> <span style="color:#666666">1</span>;<br>
+<tt><span style="white-space: pre-wrap;">        </span></tt>tdiff.tv_usec <span style="color:#666666">=</span> <span style="color:#666666">1000000</span> <span style="color:#666666">+</span> tend.tv_usec <span style="color:#666666">-</span> tstart.tv_usec;<br>
+<tt><span style="white-space: pre-wrap;">    </span>}</tt><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#008000"><strong>else</strong></span> {<br>
+<tt><span style="white-space: pre-wrap;">        </span></tt>tdiff.tv_sec <span style="color:#666666">=</span> tend.tv_sec <span style="color:#666666">-</span> tstart.tv_sec;<br>
+<tt><span style="white-space: pre-wrap;">        </span></tt>tdiff.tv_usec <span style="color:#666666">=</span> tend.tv_usec <span style="color:#666666">-</span> tstart.tv_usec;<br>
+<tt><span style="white-space: pre-wrap;">    </span>}</tt><br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>total_msec <span style="color:#666666">=</span> tdiff.tv_sec <span style="color:#666666">*</span> <span style="color:#666666">1000</span> <span style="color:#666666">+</span> tdiff.tv_usec <span style="color:#666666">/</span> <span style="color:#666666">1000</span>;<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt>std<span style="color:#666666">::</span>cout <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> <span style="color:#BA2121">"</span><span style="color:#BB6622"><strong>\n</strong></span><span style="color:#BA2121">Total elapsed time: "</span> <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> total_msec <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> <span style="color:#BA2121">" msec</span><span style="color:#BB6622"><strong>\n</strong></span><span style="color:#BA2121">"</span> <span style="color:#666666"><span style="white-space: pre-wrap;">&lt;&lt;</span></span> std<span style="color:#666666">::</span>endl;<br>
+<tt><span style="white-space: pre-wrap;">    </span></tt><span style="color:#008000"><strong>return</strong></span> <span style="color:#666666">0</span>;<br>
+}</p>
+</div>
+
+                    </div>
+
+                    
+
+
+
+                    
+
+                    <div id="page-info-break"></div>
+                    
+                        <div id="page-options-container">
+                            
+                        </div>
+                    
+                    <div id="action-area" style="display: none;"></div>
+                </div>
+            </div>
+            
+            
+            
+            <div id="footer" style="display: block; visibility: visible;">
+                
+
+<p>Web site design and content is copyright (c) 2014 iMatix Corporation. <a href="http://www.imatix.com/contact">Contact us for professional support.</a> Site content licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/">cc-by-sa 3.0</a>
+ ØMQ is copyright (c) Copyright (c) 2007-2014 iMatix Corporation and 
+Contributors. ØMQ is free software licensed under the LGPL. ØMQ and 
+ZEROMQ are trademarks of iMatix Corporation. <a href="http://zguide.zeromq.org/legal:terms-of-use">Terms of Use</a> — <a href="http://zguide.zeromq.org/legal:privacy-policy">Privacy Policy</a></p>
+
+            </div>
+            
+            
+            
+
+
+
+            <div id="extrac-div-1"><span></span></div><div id="extrac-div-2"><span></span></div><div id="extrac-div-3"><span></span></div>
+            
+            
+            
+            
+                
+            
+        </div>
+        
+    </div>
+<!-- These extra divs/spans may be used as catch-alls to add extra imagery. -->
+<div id="extra-div-1"><span></span></div><div id="extra-div-2"><span></span></div><div id="extra-div-3"><span></span></div>
+<div id="extra-div-4"><span></span></div><div id="extra-div-5"><span></span></div><div id="extra-div-6"><span></span></div>
+</div>
+
+
+
+</div>
+<div id="dummy-ondomready-block" style="display: none;"></div>
+    <!-- Google Analytics load -->
+    <script type="text/javascript">
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <!-- Quantcast -->
+    <script type="text/javascript">
+    _qoptions={
+        qacct:"p-edL3gsnUjJzw-"
+    };
+    (function() {
+        var qc = document.createElement('script'); qc.type = 'text/javascript'; qc.async = true;
+        qc.src = ('https:' == document.location.protocol ? 'https://secure' : 'http://edge') + '.quantserve.com/quant.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(qc, s);
+    })();
+    </script>
+    <noscript>
+        <img src="http://pixel.quantserve.com/pixel/p-edL3gsnUjJzw-.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/>
+    </noscript>
+
+
+
+
+<div id="page-options-bottom-tips" style="display: none;">
+    <div id="edit-button-hovertip">
+        Click here to edit contents of this page.    </div>
+</div>
+<div id="page-options-bottom-2-tips" style="display: none;">
+    <div id="edit-sections-button-hovertip">
+        Click here to toggle editing of individual sections of the page 
+(if possible).         Watch headings for an "edit" link when available.
+    </div>
+    <div id="edit-append-button-hovertip">
+        Append content without editing the whole page source.    </div>
+    <div id="history-button-hovertip">
+        Check out how this page has evolved in the past.    </div>
+    <div id="discuss-button-hovertip">
+        If you want to discuss contents of this page - this is the easiest way to do it.    </div>
+    <div id="files-button-hovertip">
+        View and manage file attachments for this page.    </div>
+    <div id="site-tools-button-hovertip">
+        A few useful tools to manage this Site.    </div>
+    <div id="backlinks-button-hovertip">
+        See pages that link to and include this page.    </div>
+    <div id="rename-move-button-hovertip">
+        Change the name (also URL address, possibly the category) of the page.    </div>
+    <div id="view-source-button-hovertip">
+        View wiki source for this page without editing.    </div>
+    <div id="parent-page-button-hovertip">  
+        View/set parent page (used for creating breadcrumbs and structured layout).    </div>
+    </div>
+
+<div style="position: absolute; z-index: 100; top: 0px; width: 100%;" id="odialog-hovertips"></div></body></html>
